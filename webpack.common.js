@@ -1,21 +1,21 @@
 const path = require('path');
-const htmlWebpackPlugin = require('html-webpack-plugin');
-const cleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
   entry: {
-    index: './src/index.js',
-    print: './src/print.js',
-    another: './src/another-module.js'
+    app: './src/index.js'
   },
+  plugins: [
+    new CleanWebpackPlugin(['dist']),
+    new HtmlWebpackPlugin({
+      title: 'Production'
+    })
+  ],
   output: {
     filename: '[name].[chunkhash].bundle.js',
     path: path.resolve(__dirname, 'dist')
-  },
-  devtool: 'inline-source-map',
-  devServer: { // auto refresh browser,need install webpack-dev-server package
-    contentBase: './dist'
   },
   optimization: { // code splite
     splitChunks: {
@@ -28,12 +28,6 @@ module.exports = {
       }
     }
   },
-  plugins: [
-    new cleanWebpackPlugin(['dist']),
-    new htmlWebpackPlugin({
-      title: 'Output   Management'
-    })
-  ],
   module: {
     rules: [{ // CSS资源加载
       test: /\.css$/,
